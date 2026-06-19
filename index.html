@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluxo de Trabalho UX — Dashboard Interativo</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* VARIABLES & THEME (Premium Cyber-Dark Glassmorphism) */
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-secondary: #111827;
+      --bg-card: rgba(30, 41, 59, 0.45);
+      --bg-card-hover: rgba(30, 41, 59, 0.7);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(59, 130, 246, 0.2);
+      
+      --primary: #3b82f6;
+      --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+      --primary-glow: rgba(59, 130, 246, 0.35);
+      
+      --accent-cyan: #06b6d4;
+      --accent-cyan-glow: rgba(6, 182, 212, 0.3);
+      
+      --success: #10b981;
+      --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      --success-glow: rgba(16, 185, 129, 0.3);
+      --success-bg: rgba(16, 185, 129, 0.1);
+      
+      --warning: #f59e0b;
+      --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --warning-glow: rgba(245, 158, 11, 0.3);
+      --warning-bg: rgba(245, 158, 11, 0.1);
+      
+      --danger: #ef4444;
+      --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      --danger-glow: rgba(239, 68, 68, 0.3);
+      --danger-bg: rgba(239, 68, 68, 0.1);
+
+      --text-primary: #f3f4f6;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      
+      --glass-bg: rgba(17, 24, 39, 0.7);
+      --glass-blur: blur(12px);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* GLOBAL STYLES */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-primary);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(17, 24, 39, 0.4) 0px, transparent 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* CUSTOM SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+
+    /* HEADER */
+    .header {
+      position: relative;
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.8) 0%, rgba(11, 15, 25, 0) 100%);
+      padding: 60px 48px 40px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .header-label {
+      position: relative;
+      display: inline-block;
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.1);
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      margin-bottom: 18px;
+      z-index: 1;
+    }
+    .header h1 {
+      position: relative;
+      font-family: 'Outfit', sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 30%, #a5f3fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      z-index: 1;
+    }
+    .header p {
+      position: relative;
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 650px;
+      margin: 0 auto;
+      z-index: 1;
+    }
+
+    /* NAVIGATION TABS */
+    .nav-container {
+      display: flex;
+      justify-content: center;
+      padding: 10px 24px;
+      background: rgba(17, 24, 39, 0.5);
+      backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .nav {
+      display: flex;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 6px;
+      border-radius: 30px;
+      border: 1px solid var(--glass-border);
+      max-width: 900px;
+      width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav::-webkit-scrollbar {
+      display: none;
+    }
+    .nav-btn {
+      flex: 1;
+      padding: 12px 20px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      border-radius: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: var(--transition-smooth);
+    }
+    .nav-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .nav-btn.active {
+      color: #ffffff;
+      background: var(--primary-gradient);
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    /* MAIN CONTAINER */
+    .content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      position: relative;
+    }
+
+    /* SECTION TRANSITIONS */
+    .section {
+      display: none;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .section.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* CARDS COMMON */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 28px;
+      backdrop-filter: var(--glass-blur);
+      transition: var(--transition-smooth);
+    }
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-glow);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* SECTION 1: PROBLEMAS */
+    .section-intro {
+      margin-bottom: 32px;
+      text-align: left;
+    }
+    .section-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .section-badge-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--danger);
+      box-shadow: 0 0 10px var(--danger-glow);
+    }
+    .section-title-wrap h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .section-intro p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      max-width: 750px;
+    }
+
+    .problems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .problem-card {
+      position: relative;
+      overflow: hidden;
+      border-left: 3px solid var(--danger);
+    }
+    .problem-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.05) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .problem-card .icon-wrapper {
+      width: 48px;
+      height: 48px;
+      background: var(--danger-bg);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+      color: var(--danger);
+      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.1);
+    }
+    .problem-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+    .problem-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* DIAGNOSTIC BANNER */
+    .diagnostic-banner {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(17, 24, 39, 0.6) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 16px;
+      padding: 24px 32px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .diagnostic-banner .warning-icon {
+      font-size: 32px;
+      animation: pulse 2s infinite;
+      flex-shrink: 0;
+    }
+    .diagnostic-banner h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fca5a5;
+      margin-bottom: 4px;
+    }
+    .diagnostic-banner p {
+      font-size: 13px;
+      color: #fca5a5;
+      opacity: 0.85;
+      max-width: 900px;
+    }
+
+    /* SECTION 2: TIMELINE */
+    .principle-card {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 36px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.05);
+    }
+    .principle-card .icon-bulb {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    .principle-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #93c5fd;
+      margin-bottom: 6px;
+    }
+    .principle-card p {
+      font-size: 13px;
+      color: #bfdbfe;
+      line-height: 1.6;
+    }
+
+    /* TIMELINE SCENARIO TABS */
+    .timeline-selector {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .selector-tab {
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 10px 24px;
+      color: var(--text-secondary);
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition-smooth);
+    }
+    .selector-tab:hover {
+      background: rgba(30, 41, 59, 0.7);
+      color: var(--text-primary);
+    }
+    .selector-tab.active[data-scenario="A"] {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
+    }
+    .selector-tab.active[data-scenario="B"] {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1);
+    }
+    .selector-tab.active[data-scenario="C"] {
+      border-color: rgba(239, 68, 68, 0.4);
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
+    }
+
+    /* SCENARIO VIEWER CONTAINER */
+    .timeline-view-container {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .timeline-interactive-wrapper {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 40px;
+      backdrop-filter: var(--glass-blur);
+    }
+
+    /* TIMELINE DYNAMIC ROW */
+    .timeline-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: relative;
+      padding-left: 20px;
+    }
+    /* Dynamic Connector Line */
+    .timeline-flow::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 35px;
+      width: 3px;
+      background: #1f2937;
+      z-index: 0;
+    }
+    .timeline-progress-line {
+      position: absolute;
+      top: 10px;
+      left: 35px;
+      width: 3px;
+      background: var(--primary-gradient);
+      z-index: 1;
+      height: 0;
+      transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* STEPS */
+    .flow-step {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      position: relative;
+      z-index: 2;
+      cursor: pointer;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      transition: var(--transition-smooth);
+    }
+    .flow-step:hover {
+      background: rgba(255, 255, 255, 0.02);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+    .flow-step.active {
+      background: rgba(59, 130, 246, 0.06);
+      border-color: rgba(59, 130, 246, 0.15);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.05);
+    }
+    .step-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #1f2937;
+      border: 2px solid #374151;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      transition: var(--transition-smooth);
+      box-shadow: 0 0 0 4px var(--bg-primary);
+    }
+    .flow-step.active .step-badge {
+      background: var(--primary-gradient);
+      border-color: #ffffff;
+      color: #ffffff;
+      box-shadow: 0 0 0 4px var(--bg-primary), 0 0 15px var(--primary-glow);
+    }
+    .step-info {
+      flex: 1;
+    }
+    .step-time {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-cyan);
+      margin-bottom: 4px;
+    }
+    .step-label-txt {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    .step-summary-txt {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* TIMELINE SCENARIO INFO BANNER */
+    .scenario-intro-info {
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 20px;
+    }
+    .scenario-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .scenario-title-row h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .scenario-badge-tag {
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
+    .scenario-badge-tag.green-bg { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; }
+    .scenario-badge-tag.orange-bg { background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; }
+    .scenario-badge-tag.red-bg { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; }
+    
+    .scenario-desc-txt {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .timeline-alert-box {
+      margin-top: 24px;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    /* DETAIL PANEL */
+    .detail-panel {
+      position: sticky;
+      top: 90px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 32px;
+      backdrop-filter: var(--glass-blur);
+      transition: var(--transition-smooth);
+    }
+    .detail-panel-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 300px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+    .detail-panel-placeholder .icon-click {
+      font-size: 40px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    .detail-panel-placeholder p {
+      font-size: 13px;
+      max-width: 250px;
+    }
+
+    .detail-content {
+      display: none;
+    }
+    .detail-content.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+    .detail-header-wrap {
+      margin-bottom: 20px;
+    }
+    .detail-step-badge {
+      display: inline-block;
+      font-family: 'Outfit', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.1);
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(6, 182, 212, 0.15);
+      margin-bottom: 8px;
+    }
+    .detail-header-wrap h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .detail-description {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .detail-section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* TAGS */
+    .deliverables-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .deliv-tag {
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .deliv-tag::before {
+      content: '✓';
+      color: var(--accent-cyan);
+      font-weight: bold;
+    }
+
+    /* BOXES */
+    .detail-box-alert {
+      background: var(--danger-bg);
+      border: 1px solid rgba(239, 68, 68, 0.15);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 12px;
+    }
+    .detail-box-alert .box-icon {
+      font-size: 18px;
+      color: var(--danger);
+      flex-shrink: 0;
+    }
+    .detail-box-alert .box-text h5 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fca5a5;
+      margin-bottom: 2px;
+    }
+    .detail-box-alert .box-text p {
+      font-size: 12px;
+      color: #fca5a5;
+      opacity: 0.85;
+      line-height: 1.5;
+    }
+
+    .detail-box-tip {
+      background: var(--success-bg);
+      border: 1px solid rgba(16, 185, 129, 0.15);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+    }
+    .detail-box-tip .box-icon {
+      font-size: 18px;
+      color: var(--success);
+      flex-shrink: 0;
+    }
+    .detail-box-tip .box-text h5 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #6ee7b7;
+      margin-bottom: 2px;
+    }
+    .detail-box-tip .box-text p {
+      font-size: 12px;
+      color: #6ee7b7;
+      opacity: 0.85;
+      line-height: 1.5;
+    }
+
+    /* SECTION 3: COMPARISON (Antes x Depois) */
+    .comparison-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      position: relative;
+    }
+    
+    .comparison-side {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .comparison-side-header {
+      padding: 16px;
+      border-radius: 12px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .comparison-side-header.before {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #f87171;
+    }
+    .comparison-side-header.after {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: #34d399;
+    }
+    
+    .comp-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    
+    .comp-card .dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    
+    .comp-card.before-card .dot {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .comp-card.after-card .dot {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    
+    .comp-card h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+      transition: var(--transition-smooth);
+    }
+    .comp-card p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    
+    /* Interactive highlighting connection state */
+    .comp-card.before-card:hover {
+      border-color: rgba(239, 68, 68, 0.4);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.08);
+      transform: translateX(4px);
+    }
+    .comp-card.after-card:hover {
+      border-color: rgba(16, 185, 129, 0.4);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
+      transform: translateX(-4px);
+    }
+    
+    .comp-card.highlighted-success {
+      border-color: var(--success);
+      box-shadow: 0 0 15px var(--success-glow);
+      background: rgba(16, 185, 129, 0.08);
+    }
+    .comp-card.highlighted-success h4 {
+      color: #34d399;
+    }
+    .comp-card.highlighted-danger {
+      border-color: var(--danger);
+      box-shadow: 0 0 15px var(--danger-glow);
+      background: rgba(239, 68, 68, 0.08);
+    }
+    .comp-card.highlighted-danger h4 {
+      color: #f87171;
+    }
+    .comp-card.dimmed {
+      opacity: 0.35;
+    }
+
+    /* SECTION 4: APRESENTAÇÃO */
+    .presentation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .presentation-card {
+      text-align: left;
+      position: relative;
+    }
+    .presentation-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 3px;
+      border-radius: 0 0 16px 16px;
+      background: var(--primary-gradient);
+      opacity: 0;
+      transition: var(--transition-smooth);
+    }
+    .presentation-card:hover::after {
+      opacity: 1;
+    }
+    .presentation-card .badge-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .presentation-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    .presentation-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .golden-rule-box {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(17, 24, 39, 0.6) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.05);
+    }
+    .golden-rule-box .icon-scale {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+    .golden-rule-box h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 6px;
+    }
+    .golden-rule-box p {
+      font-size: 13px;
+      color: #fde68a;
+      line-height: 1.6;
+    }
+
+    /* INTERACTIVE CHECKLIST WIDGET */
+    .checklist-widget {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 36px;
+      backdrop-filter: var(--glass-blur);
+    }
+    
+    .checklist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .checklist-title-wrap h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .checklist-title-wrap p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    
+    /* Progress Tracker */
+    .progress-tracker {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .progress-percent {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      min-width: 50px;
+      text-align: right;
+    }
+    .progress-bar-container {
+      width: 140px;
+      height: 8px;
+      background: #1f2937;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary-gradient);
+      border-radius: 4px;
+      box-shadow: 0 0 10px var(--primary-glow);
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .checklist-items {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      cursor: pointer;
+      user-select: none;
+      transition: var(--transition-smooth);
+    }
+    .check-item:hover {
+      border-color: rgba(255, 255, 255, 0.08);
+      background: rgba(15, 23, 42, 0.6);
+      transform: translateX(4px);
+    }
+    .check-item.checked {
+      border-color: rgba(16, 185, 129, 0.2);
+      background: rgba(16, 185, 129, 0.04);
+    }
+    
+    .checkbox-custom {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid #4b5563;
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: transparent;
+      font-size: 12px;
+      font-weight: bold;
+      flex-shrink: 0;
+      transition: var(--transition-smooth);
+    }
+    .check-item.checked .checkbox-custom {
+      border-color: var(--success);
+      background: var(--success-gradient);
+      color: #ffffff;
+      box-shadow: 0 0 8px var(--success-glow);
+    }
+    
+    .check-item-text {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      transition: var(--transition-smooth);
+    }
+    .check-item.checked .check-item-text {
+      color: #d1d5db;
+      text-decoration: line-through;
+      opacity: 0.8;
+    }
+    
+    /* Celebration modal/alert */
+    .success-celebration-toast {
+      display: none;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-top: 24px;
+      align-items: center;
+      gap: 14px;
+      animation: slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+    .success-celebration-toast.show {
+      display: flex;
+    }
+    .success-celebration-toast .celeb-icon {
+      font-size: 24px;
+    }
+    .success-celebration-toast h5 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #6ee7b7;
+    }
+    .success-celebration-toast p {
+      font-size: 12px;
+      color: #a7f3d0;
+      opacity: 0.9;
+    }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 40px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-color);
+      margin-top: 60px;
+      background: rgba(11, 15, 25, 0.8);
+    }
+
+    /* ANIMATIONS */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 992px) {
+      .timeline-view-container {
+        grid-template-columns: 1fr;
+      }
+      .detail-panel {
+        position: static;
+        margin-top: 24px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 48px 24px 32px;
+      }
+      .header h1 {
+        font-size: 32px;
+      }
+      .nav-container {
+        padding: 8px 12px;
+      }
+      .nav-btn {
+        padding: 10px 14px;
+        font-size: 12px;
+      }
+      .content {
+        padding: 32px 16px;
+      }
+      .comparison-wrapper {
+        grid-template-columns: 1fr;
+      }
+      .comparison-side-header {
+        font-size: 13.5px;
+      }
+      .comp-card {
+        padding: 16px;
+      }
+      .diagnostic-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        color: #000000;
+      }
+      .nav-container, .timeline-selector {
+        display: none !important;
+      }
+      .section {
+        display: block !important;
+        opacity: 1 !important;
+        transform: none !important;
+        page-break-after: always;
+      }
+      .card, .detail-panel, .timeline-interactive-wrapper {
+        background: #ffffff !important;
+        border: 1px solid #cccccc !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+      }
+      h1, h2, h3, h4, p, span {
+        color: #000000 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-label">Documento Interno · UX Design</div>
+    <h1>Fluxo de Trabalho UX</h1>
+    <p>Diagnóstico de projetos anteriores e proposta de processo iterativo e focado no usuário para novas iniciativas</p>
+  </div>
+
+  <!-- NAVIGATION TABS -->
+  <div class="nav-container">
+    <nav class="nav">
+      <button class="nav-btn active" onclick="showSection('problems')">
+        <span>⚠️</span> Problemas Identificados
+      </button>
+      <button class="nav-btn" onclick="showSection('timeline')">
+        <span>🗓️</span> Fluxo por Prazo
+      </button>
+      <button class="nav-btn" onclick="showSection('comparison')">
+        <span>↔️</span> Antes × Depois
+      </button>
+      <button class="nav-btn" onclick="showSection('presentation')">
+        <span>✅</span> Alinhamento & Aval
+      </button>
+    </nav>
+  </div>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <div class="content">
+
+    <!-- SECTION 1: PROBLEMAS -->
+    <section class="section active" id="section-problems">
+      <div class="section-intro">
+        <div class="section-title-wrap">
+          <div class="section-badge-dot"></div>
+          <h2>Diagnóstico — Projetos Contabilize Aqui e Leads</h2>
+        </div>
+        <p>Análise retrospectiva identificou falhas cruciais e repetitivas em ambos os fluxos de trabalho que resultaram em retrabalho excessivo, descompasso no cronograma e desalinhamento técnico.</p>
+      </div>
+
+      <div class="problems-grid">
+        <div class="card problem-card">
+          <div class="icon-wrapper">👤</div>
+          <h3>Ausência de pesquisa exploratória</h3>
+          <p>O desenvolvimento começou sem entrevistas iniciais ou entendimento real do ecossistema do usuário. Pontos de dor críticos não foram validados, e as soluções foram estruturadas sobre premissas corporativas internas, não dados reais.</p>
+        </div>
+
+        <div class="card problem-card">
+          <div class="icon-wrapper">🎯</div>
+          <h3>MVP1 Indefinido no Kickoff</h3>
+          <p>Desenvolveu-se telas contemplando cenários complexos de ponta a ponta sem antes fechar o escopo prioritário de entrega rápida. O time de dev trabalhava no MVP enquanto o Figma representava a visão máxima futura do produto.</p>
+        </div>
+
+        <div class="card problem-card">
+          <div class="icon-wrapper">🔄</div>
+          <h3>Descompasso Figma × Dev</h3>
+          <p>Com o Figma descolado do escopo de desenvolvimento, a equipe de UX foi forçada a criar constantemente visões reduzidas sob demanda, gerando duplicidade de esforço e perda do Figma como repositório único de verdade.</p>
+        </div>
+
+        <div class="card problem-card">
+          <div class="icon-wrapper">⏳</div>
+          <h3>Refinamentos em Cascata</h3>
+          <p>Sem validação inicial, fluxos de jornada inteiros precisaram ser reimaginados após o início da codificação. Isso causou desperdício de sprints de engenharia e atrasos sucessivos na entrega.</p>
+        </div>
+      </div>
+
+      <div class="diagnostic-banner">
+        <div class="warning-icon">⚠️</div>
+        <div class="banner-txt-wrap">
+          <h4>Impacto Organizacional Constatado</h4>
+          <p>A falta de discovery estruturado e definição rígida de MVP no dia zero corrompe a previsibilidade das entregas e desgasta o entrosamento operacional do time de produto e tecnologia. O novo fluxo visa blindar esse ecossistema.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: TIMELINE (FLUXO POR PRAZO) -->
+    <section class="section" id="section-timeline">
+      <div class="principle-card">
+        <div class="icon-bulb">💡</div>
+        <div class="principle-txt">
+          <h3>Princípio de Blindagem de Discovery</h3>
+          <p>O processo de UX Design deve atuar de forma antecedente e exclusiva ao desenvolvimento de código. Esse distanciamento cronológico estruturado garante que a engenharia inicie a sprint com requisitos visuais e de negócios completamente sólidos, testados e aprovados.</p>
+        </div>
+      </div>
+
+      <!-- Timeline selector tabs -->
+      <div class="timeline-selector">
+        <button class="selector-tab active" data-scenario="A" onclick="switchScenario('A')">
+          <span>🟢</span> Cenário A (1 Mês)
+        </button>
+        <button class="selector-tab" data-scenario="B" onclick="switchScenario('B')">
+          <span>🟡</span> Cenário B (2 Semanas)
+        </button>
+        <button class="selector-tab" data-scenario="C" onclick="switchScenario('C')">
+          <span>🔴</span> Cenário C (1 Semana)
+        </button>
+      </div>
+
+      <!-- Timeline Split View -->
+      <div class="timeline-view-container">
+        
+        <!-- Left: Interactive Flow Elements -->
+        <div class="timeline-interactive-wrapper">
+          <!-- Dynamically populated scenario intro -->
+          <div class="scenario-intro-info" id="scenario-meta">
+            <!-- JS updates this -->
+          </div>
+
+          <!-- Dynamic steps container -->
+          <div class="timeline-flow" id="timeline-flow-steps">
+            <div class="timeline-progress-line" id="timeline-progress"></div>
+            <!-- Steps injected by JS -->
+          </div>
+        </div>
+
+        <!-- Right: Detail Panel -->
+        <div class="detail-panel">
+          <div class="detail-panel-placeholder" id="detail-placeholder">
+            <div class="icon-click">👆</div>
+            <p>Clique em qualquer etapa do fluxo interativo ao lado para visualizar os entregáveis, riscos de omissão e dicas de condução.</p>
+          </div>
+          
+          <div class="detail-content" id="detail-panel-content">
+            <div class="detail-header-wrap">
+              <span class="detail-step-badge" id="detail-badge-label">Semana 1</span>
+              <h4 id="detail-title">Nome da Etapa</h4>
+            </div>
+            
+            <p class="detail-description" id="detail-desc">Descrição completa da etapa...</p>
+            
+            <div class="detail-section-title">Entregáveis</div>
+            <div class="deliverables-flex" id="detail-deliverables">
+              <!-- Tags injected by JS -->
+            </div>
+            
+            <div class="detail-box-alert">
+              <div class="box-icon">🚨</div>
+              <div class="box-text">
+                <h5>Risco de Omissão</h5>
+                <p id="detail-risk">O que acontece se pular...</p>
+              </div>
+            </div>
+
+            <div class="detail-box-tip">
+              <div class="box-icon">⚡</div>
+              <div class="box-text">
+                <h5>Dica de Condução</h5>
+                <p id="detail-tip">Conselho prático para rodar...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3: COMPARAÇÃO (Antes x Depois) -->
+    <section class="section" id="section-comparison">
+      <div class="section-intro">
+        <div class="section-title-wrap">
+          <div class="section-badge-dot" style="background: var(--success); box-shadow: 0 0 10px var(--success-glow);"></div>
+          <h2>Conexão Causa e Efeito — Solucionando a Operação</h2>
+        </div>
+        <p>Entenda como as novas regras propostas neutralizam diretamente cada um dos pontos de fricção identificados no diagnóstico dos projetos passados. Clique em uma dor ou solução para destacar o par correspondente.</p>
+      </div>
+
+      <div class="comparison-wrapper">
+        <!-- Before Column -->
+        <div class="comparison-side">
+          <div class="comparison-side-header before">
+            <span>✗</span> Processo Anterior (Pontos de Fricção)
+          </div>
+          
+          <div class="comp-card before-card" data-pair="1" onclick="highlightPair('1')">
+            <div class="dot">1</div>
+            <div>
+              <h4>Desenho e Dev Paralelos</h4>
+              <p>UX e Engenharia iniciavam juntos, forçando a criação de layouts em tempo de codificação.</p>
+            </div>
+          </div>
+
+          <div class="comp-card before-card" data-pair="2" onclick="highlightPair('2')">
+            <div class="dot">2</div>
+            <div>
+              <h4>Falta de Voz do Usuário</h4>
+              <p>Projetos iniciavam sem entrevistas, baseando soluções em percepções internas.</p>
+            </div>
+          </div>
+
+          <div class="comp-card before-card" data-pair="3" onclick="highlightPair('3')">
+            <div class="dot">3</div>
+            <div>
+              <h4>Escopo Aberto / Sem MVP1</h4>
+              <p>O sistema era projetado sem priorização rígida do primeiro marco de valor entregável.</p>
+            </div>
+          </div>
+
+          <div class="comp-card before-card" data-pair="4" onclick="highlightPair('4')">
+            <div class="dot">4</div>
+            <div>
+              <h4>Figma Desalinhado da Sprint</h4>
+              <p>Figma continha o sistema completo gerando retrabalho na criação de visões menores para os devs.</p>
+            </div>
+          </div>
+
+          <div class="comp-card before-card" data-pair="5" onclick="highlightPair('5')">
+            <div class="dot">5</div>
+            <div>
+              <h4>Retrabalho Crônico</h4>
+              <p>Fluxos eram reimaginados em sprints avançadas após contato tardio com problemas de negócio.</p>
+            </div>
+          </div>
+
+          <div class="comp-card before-card" data-pair="6" onclick="highlightPair('6')">
+            <div class="dot">6</div>
+            <div>
+              <h4>Perda de Rastreabilidade</h4>
+              <p>Figma deixava de ser o norte oficial de verdade gerando desalinhamento das regras de telas.</p>
+            </div>
+          </div>
+
+          <div class="comp-card before-card" data-pair="7" onclick="highlightPair('7')">
+            <div class="dot">7</div>
+            <div>
+              <h4>Ausência de Aval dos Stakeholders</h4>
+              <p>Falta de validação unificada pré-sprint gerava contestações e mudanças estruturais tardias.</p>
+            </div>
+          </div>
+
+          <div class="comp-card before-card" data-pair="8" onclick="highlightPair('8')">
+            <div class="dot">8</div>
+            <div>
+              <h4>Abstração de Cronograma</h4>
+              <p>Falta de prazos de UX limitava a visão clara de evolução do roadmap e das fases futuras.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- After Column -->
+        <div class="comparison-side">
+          <div class="comparison-side-header after">
+            <span>✓</span> Novo Processo Proposto (Blindagem)
+          </div>
+          
+          <div class="comp-card after-card" data-pair="1" onclick="highlightPair('1')">
+            <div class="dot">1</div>
+            <div>
+              <h4>Período Exclusivo Antecipado</h4>
+              <p>UX completa a definição e aprovação visual antes da primeira linha de código ser escrita.</p>
+            </div>
+          </div>
+
+          <div class="comp-card after-card" data-pair="2" onclick="highlightPair('2')">
+            <div class="dot">2</div>
+            <div>
+              <h4>Entrevistas Qualitativas</h4>
+              <p>Coleta de dados e mapeamento qualitativo estruturado e obrigatório com usuários reais do sistema.</p>
+            </div>
+          </div>
+
+          <div class="comp-card after-card" data-pair="3" onclick="highlightPair('3')">
+            <div class="dot">3</div>
+            <div>
+              <h4>Marco MVP1 Definido no Dia 1</h4>
+              <p>Filtro severo do escopo inicial da jornada e congelamento dos limites da entrega inicial.</p>
+            </div>
+          </div>
+
+          <div class="comp-card after-card" data-pair="4" onclick="highlightPair('4')">
+            <div class="dot">4</div>
+            <div>
+              <h4>Figma Espelha a Sprint Real</h4>
+              <p>O protótipo do Figma representa de forma idêntica o escopo de engenharia definido para a sprint.</p>
+            </div>
+          </div>
+
+          <div class="comp-card after-card" data-pair="5" onclick="highlightPair('5')">
+            <div class="dot">5</div>
+            <div>
+              <h4>Discovery Base Sólida</h4>
+              <p>Testes de wireframes de baixa/média fidelidade evitam mudanças drásticas no código de front-end.</p>
+            </div>
+          </div>
+
+          <div class="comp-card after-card" data-pair="6" onclick="highlightPair('6')">
+            <div class="dot">6</div>
+            <div>
+              <h4>Figma como Único Repositório</h4>
+              <p>Centralização definitiva de layouts, fluxos e regras de exceção descritas no canvas do design.</p>
+            </div>
+          </div>
+
+          <div class="comp-card after-card" data-pair="7" onclick="highlightPair('7')">
+            <div class="dot">7</div>
+            <div>
+              <h4>Apresentação Mandatória de Aval</h4>
+              <p>Reunião formal com stakeholders para alinhamento e assinatura do MVP1 antes de liberar o backlog.</p>
+            </div>
+          </div>
+
+          <div class="comp-card after-card" data-pair="8" onclick="highlightPair('8')">
+            <div class="dot">8</div>
+            <div>
+              <h4>Roadmap Visual Fatiado</h4>
+              <p>Mapeamento visual pós-MVP1 mostrando exatamente como o produto evoluirá nas sprints seguintes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: APRESENTAÇÃO / STAKEHOLDERS -->
+    <section class="section" id="section-presentation">
+      <div class="section-intro">
+        <div class="section-title-wrap">
+          <div class="section-badge-dot" style="background: var(--primary); box-shadow: 0 0 10px var(--primary-glow);"></div>
+          <h2>Alinhamento de Expectativas e Aval Formal</h2>
+        </div>
+        <p>A etapa de apresentação não é burocrática, mas sim um processo de blindagem do produto que protege o time de desenvolvimento contra mudanças intempestivas.</p>
+      </div>
+
+      <div class="presentation-grid">
+        <div class="card presentation-card">
+          <span class="badge-icon">🎯</span>
+          <h3>Validação de Negócios</h3>
+          <p>Garante que a jornada mapeada pelo UX está cobrindo as nuances operacionais e as regras de negócio mais complexas sem atritos para o usuário final.</p>
+        </div>
+
+        <div class="card presentation-card">
+          <span class="badge-icon">🔑</span>
+          <h3>Autorização de Produção</h3>
+          <p>O aval e validação explícitos dos stakeholders agem como a liberação oficial da sprint de desenvolvimento, dando segurança de foco total ao time de engenharia.</p>
+        </div>
+
+        <div class="card presentation-card">
+          <span class="badge-icon">🛡️</span>
+          <h3>Prevenção de Mudanças</h3>
+          <p>Os feedbacks cruciais e as eventuais mudanças de rota são aplicados em minutos no Figma, em vez de exigir refatoração dispendiosa no banco de dados ou código estrutural.</p>
+        </div>
+      </div>
+
+      <div class="golden-rule-box">
+        <div class="icon-scale">⚖️</div>
+        <div>
+          <h3>A Regra de Ouro da Produção</h3>
+          <p>A engenharia de software não deve iniciar a codificação de novos fluxos de telas sem que o protótipo do Figma correspondente tenha recebido o aval formal unificado dos stakeholders e da equipe de produto.</p>
+        </div>
+      </div>
+
+      <!-- CHECKLIST WIDGET -->
+      <div class="checklist-widget">
+        <div class="checklist-header">
+          <div class="checklist-title-wrap">
+            <h3>Checklist de Prontidão da Apresentação</h3>
+            <p>Antes de agendar o alinhamento com stakeholders, garanta que os seguintes pontos estejam prontos:</p>
+          </div>
+          <div class="progress-tracker">
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="checklist-progress-bar"></div>
+            </div>
+            <div class="progress-percent" id="checklist-percent-text">0%</div>
+          </div>
+        </div>
+
+        <div class="checklist-items">
+          <div class="check-item" onclick="toggleCheckItem(this)">
+            <div class="checkbox-custom">✓</div>
+            <span class="check-item-text">Compilação dos dados qualitativos e insights da fase de discovery e entrevistas com usuários finais.</span>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(this)">
+            <div class="checkbox-custom">✓</div>
+            <span class="check-item-text">Apresentação estruturada do problem principal abordado e as hipóteses validadas.</span>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(this)">
+            <div class="checkbox-custom">✓</div>
+            <span class="check-item-text">Filtro do MVP1 desenhado com justificativa clara do porquê de cada funcionalidade incluída ou deixada de fora.</span>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(this)">
+            <div class="checkbox-custom">✓</div>
+            <span class="check-item-text">Protótipo navegável de média/alta fidelidade no Figma contendo o fluxo feliz principal estruturado.</span>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(this)">
+            <div class="checkbox-custom">✓</div>
+            <span class="check-item-text">Cronograma básico e roadmap dos próximos passos após a entrega do MVP1 (fatiamento de releases).</span>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(this)">
+            <div class="checkbox-custom">✓</div>
+            <span class="check-item-text">Tempo reservado no final da reunião para feedbacks diretos e documentação dos pontos de ajuste.</span>
+          </div>
+        </div>
+
+        <!-- SUCCESS CELEBRATION -->
+        <div class="success-celebration-toast" id="checklist-celebration">
+          <div class="celeb-icon">🚀</div>
+          <div>
+            <h5>Alinhamento Blindado & Pronto para Apresentação!</h5>
+            <p>Todos os requisitos foram preenchidos. Apresente com segurança e garanta a homologação antes da sprint.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Fluxo de Trabalho UX · Junho de 2026 · Documentação de Padrões Internos de Qualidade · Uso Confidencial
+  </div>
+
+  <!-- CORE SCRIPTS -->
+  <script>
+    // NAVIGATION
+    function showSection(sectionId) {
+      // Update nav buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('onclick').includes(sectionId)) {
+          btn.classList.add('active');
+        }
+      });
+
+      // Update sections with animation
+      document.querySelectorAll('.section').forEach(section => {
+        if (section.id === 'section-' + sectionId) {
+          section.style.display = 'block';
+          // trigger redraw to apply transition
+          section.offsetHeight;
+          section.classList.add('active');
+        } else {
+          section.classList.remove('active');
+          section.style.display = 'none';
+        }
+      });
+      
+      // Auto highlight first step if entering timeline
+      if (sectionId === 'timeline') {
+        const currentScenario = document.querySelector('.selector-tab.active').getAttribute('data-scenario');
+        // If no step selected, select first
+        setTimeout(() => {
+          const firstStep = document.querySelector('.flow-step');
+          if (firstStep) firstStep.click();
+        }, 100);
+      }
+    }
+
+    // TIMELINE DATA
+    const scenarios = {
+      A: {
+        badgeClass: 'green-bg',
+        badgeLabel: 'Ideal',
+        badgeVal: 'Cenário A · 1 Mês',
+        desc: 'Ciclo completo de discovery, entrevistas de campo e validação contínua do MVP com o usuário.',
+        warning: null,
+        steps: [
+          {
+            badge: '🔍',
+            time: 'Semana 1',
+            label: 'Discovery & Desk Research',
+            desc: 'Alinhamento inicial de objetivos do negócio, definição de hipóteses de problemas, benchmarking de competidores e construção de Matriz CSD para alinhar o entendimento comum.',
+            deliverables: ['Matriz CSD', 'Benchmarking de Concorrentes', 'Plano de Recrutamento'],
+            risk: 'Construir a interface baseada em visões míopes ou parciais do time interno, forçando redesenho em fases avançadas.',
+            tip: 'Mantenha os engenheiros de software no kickoff para validar viabilidades básicas e evitar desperdício em ideias inviáveis.'
+          },
+          {
+            badge: '🎙️',
+            time: 'Semana 2',
+            label: 'Entrevistas Qualitativas',
+            desc: 'Realização de conversas guiadas com usuários finais reais (ex: contadores ou consultores) para desvendar fluxos diários, gargalos práticos e reais atritos cognitivos.',
+            deliverables: ['Roteiro de Entrevistas', 'Gravações & Transcrições', 'Mapa de Empatia Consolidado'],
+            risk: 'Focar em problemas teóricos de negócio e ignorar atritos cruciais operacionais dos usuários do dia a dia.',
+            tip: 'Não venda ideias nas entrevistas; ouça as dores espontâneas. 5 entrevistas estruturadas resolvem a maioria das dúvidas de usabilidade.'
+          },
+          {
+            badge: '📋',
+            time: 'Semana 3',
+            label: 'Priorização de Histórias & MVP',
+            desc: 'Agrupamento e priorização das descobertas. Mapeamento enxuto da jornada para delimitar estritamente o MVP1 e fatiar releases subsequentes em um roadmap compreensível.',
+            deliverables: ['Mapeamento de Histórias (User Story Map)', 'Delimitação Formal do MVP1', 'Personas de Negócio'],
+            risk: 'Escopo excessivamente inflado (featuritis), resultando em sprints longas, atrasadas e código complexo demais para manter.',
+            tip: 'Use a matriz Esforço × Impacto de forma colaborativa com Engenharia e Gestão de Produto.'
+          },
+          {
+            badge: '🖼️',
+            time: 'Semana 4',
+            label: 'Design do Protótipo & Homologação',
+            desc: 'Criação dos layouts principais do MVP1 no Figma em média fidelidade, promovendo teste de usabilidade rápido com os entrevistados e fechamento formal da etapa com stakeholders.',
+            deliverables: ['Protótipo Navegável no Figma', 'Styleguide básico', 'Aval Assinado dos Stakeholders'],
+            risk: 'O time de desenvolvimento iniciar a codificação a partir de wireframes instáveis ou sem homologação final do negócio.',
+            tip: 'Reserve esta semana para polir os fluxos de exceção (erros, loadings) que geralmente quebram a experiência de desenvolvimento.'
+          }
+        ]
+      },
+      B: {
+        badgeClass: 'orange-bg',
+        badgeLabel: 'Médio',
+        badgeVal: 'Cenário B · 2 Semanas',
+        desc: 'Ciclo rápido e pragmático. Discovery condensado, priorizando entrevistas expressas com 2 a 3 usuários chave.',
+        warning: 'Cronograma curto. O recrutamento de usuários deve ser antecipado e ágil para não comprometer o prazo de entrega.',
+        steps: [
+          {
+            badge: '📅',
+            time: 'Dias 1 – 3',
+            label: 'Alinhamento & Kickoff Express',
+            desc: 'Reunião de alinhamento tático com stakeholders e engenharia. Definição do escopo hipotético inicial e formulação de Matriz CSD simplificada.',
+            deliverables: ['Matriz CSD condensada', 'Matriz de Escopo Inicial'],
+            risk: 'Desperdiçar tempo em debates abstratos em vez de consolidar uma definição pragmática e restrita de objetivos.',
+            tip: 'Utilize dinâmicas visuais de cocriação (tipo Lean Inception curta) para alinhar o grupo em poucas horas.'
+          },
+          {
+            badge: '🔍',
+            time: 'Dias 4 – 7',
+            label: 'Desk Research & Validação Direta',
+            desc: 'Análise ágil de dores, com execução expressa de 2 a 3 entrevistas com usuários internos ou externos essenciais para ajuste rápido de premissas.',
+            deliverables: ['Notas de Entrevistas Rápidas', 'Hipóteses Refinadas'],
+            risk: 'Desenhar fluxos cegamente sob a desculpa de prazo curto, criando atritos óbvios na interface final.',
+            tip: 'Considere recrutar usuários internos (ex: suporte ou pós-venda) como intermediários rápidos da voz do cliente se o recrutamento externo travar.'
+          },
+          {
+            badge: '📋',
+            time: 'Dias 8 – 10',
+            label: 'Fatiamento de Escopo & MVP1',
+            desc: 'Refinamento do backlog com focagem exclusiva no fluxo crítico do MVP1. Registro claro de telas omitidas temporariamente.',
+            deliverables: ['Escopo do MVP1 Fechado', 'Fatiamento de Releases (Roadmap)'],
+            risk: 'Tentar desenhar funcionalidades acessórias, extrapolando os limites das 2 semanas de design do fluxo.',
+            tip: 'Tudo o que não for estritamente vital para o fluxo de compra/operação deve ir para a lista de melhorias futuras.'
+          },
+          {
+            badge: '🖼️',
+            time: 'Dias 11 – 14',
+            label: 'Layout & Validação Unificada',
+            desc: 'Construção direta dos layouts de média/alta fidelidade no Figma e realização da reunião de alinhamento com stakeholders para aprovação imediata.',
+            deliverables: ['Telas Prontas para Dev', 'Homologação do Design'],
+            risk: 'Iniciar sprints de engenharia sem que os fluxos complexos de regras de dados estejam consolidados visualmente.',
+            tip: 'Utilize componentes pré-existentes da biblioteca para acelerar a entrega do layout aprovado.'
+          }
+        ]
+      },
+      C: {
+        badgeClass: 'red-bg',
+        badgeLabel: 'Crítico',
+        badgeVal: 'Cenário C · 1 Semana',
+        desc: 'Design de extrema urgência. Entrevistas primárias suspensas. Discovery baseado em dados históricos e proxy de stakeholders.',
+        warning: 'Processo altamente arriscado. A ausência de entrevistas deve ser mitigada com proximidade diária dos stakeholders e de produto.',
+        steps: [
+          {
+            badge: '📅',
+            time: 'Dias 1 – 2',
+            label: 'Kickoff de Alinhamento & Proxy',
+            desc: 'Workshop intensivo de alinhamento. Mapeamento de fluxos via stakeholders experientes atuando como proxy dos usuários finais.',
+            deliverables: ['Fluxograma de Processo Consolidado', 'Lista de Restrições Técnicas'],
+            risk: 'Seguir premissas incorretas de usabilidade devido ao distanciamento dos usuários reais.',
+            tip: 'Use dados históricos de suporte, reclamações e análises anteriores do funil para suprir a falta de entrevistas.'
+          },
+          {
+            badge: '🎙️',
+            time: 'Dia 3',
+            label: 'Entrevista de Validação Relâmpago',
+            desc: 'Realização de uma entrevista/validação única com usuário-chave ou analista operacional para chancelar o fluxo desenhado preliminarmente.',
+            deliverables: ['Ajustes rápidos de Fluxo', 'Notas de Risco Mapeado'],
+            risk: 'Lançar o fluxo contendo erros óbvios na lógica que poderiam ser descobertos em um teste de 15 minutos.',
+            tip: 'Mesmo com 15 minutos, teste o fluxo de wireframes com alguém que não faça parte do projeto.'
+          },
+          {
+            badge: '📋',
+            time: 'Dias 4 – 5',
+            label: 'Figma MVP1 & Homologação Express',
+            desc: 'Modelagem do fluxo feliz principal no Figma e apresentação para chancela formal com stakeholders nas últimas horas do prazo.',
+            deliverables: ['Fluxo Feliz no Figma', 'Aprovação Visual Rápida'],
+            risk: 'Dev iniciar tarefas de front-end às escuras, resultando em retrabalhos severos no meio da sprint.',
+            tip: 'Adicione anotações funcionais diretamente no Figma para mitigar dúvidas e compensar a falta de detalhamento visual.'
+          }
+        ]
+      }
+    };
+
+    // ACTIVE SCENARIO STATE
+    let currentScenarioId = 'A';
+
+    function switchScenario(scenarioId) {
+      currentScenarioId = scenarioId;
+      
+      // Update scenario selector active state
+      document.querySelectorAll('.selector-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.getAttribute('data-scenario') === scenarioId) {
+          tab.classList.add('active');
+        }
+      });
+
+      renderScenarioTimeline(scenarioId);
+    }
+
+    function renderScenarioTimeline(scenarioId) {
+      const scenario = scenarios[scenarioId];
+      const metaContainer = document.getElementById('scenario-meta');
+      const stepsContainer = document.getElementById('timeline-flow-steps');
+      
+      // Update meta info
+      metaContainer.innerHTML = `
+        <div class="scenario-title-row">
+          <h3>${scenario.badgeVal}</h3>
+          <span class="scenario-badge-tag ${scenario.badgeClass}">${scenario.badgeLabel}</span>
+        </div>
+        <p class="scenario-desc-txt">${scenario.desc}</p>
+      `;
+
+      if (scenario.warning) {
+        metaContainer.innerHTML += `
+          <div class="timeline-alert-box ${scenarioId === 'C' ? 'alert-danger' : 'alert-warning'}">
+            <span>🚨</span>
+            <div><strong>Atenção de Cronograma:</strong> ${scenario.warning}</div>
+          </div>
+        `;
+      }
+
+      // Clear steps (but keep progress bar line)
+      stepsContainer.innerHTML = '<div class="timeline-progress-line" id="timeline-progress"></div>';
+
+      // Insert steps
+      scenario.steps.forEach((step, index) => {
+        const stepDiv = document.createElement('div');
+        stepDiv.className = 'flow-step';
+        stepDiv.setAttribute('onclick', `selectStep(${index})`);
+        stepDiv.innerHTML = `
+          <div class="step-badge">${step.badge}</div>
+          <div class="step-info">
+            <div class="step-time">${step.time}</div>
+            <div class="step-label-txt">${step.label}</div>
+            <div class="step-summary-txt">${step.desc.slice(0, 75)}...</div>
+          </div>
+        `;
+        stepsContainer.appendChild(stepDiv);
+      });
+
+      // Clear details panel selection state
+      document.getElementById('detail-placeholder').style.display = 'flex';
+      document.getElementById('detail-panel-content').classList.remove('active');
+      
+      // Adjust progress line height to 0 initially
+      document.getElementById('timeline-progress').style.height = '0%';
+
+      // Click the first step automatically with a small delay for animation
+      setTimeout(() => {
+        const firstStep = stepsContainer.querySelector('.flow-step');
+        if (firstStep) firstStep.click();
+      }, 50);
+    }
+
+    function selectStep(index) {
+      const scenario = scenarios[currentScenarioId];
+      const step = scenario.steps[index];
+      
+      // Update active classes on steps
+      const steps = document.querySelectorAll('#timeline-flow-steps .flow-step');
+      steps.forEach((stepEl, idx) => {
+        if (idx === index) {
+          stepEl.classList.add('active');
+        } else {
+          stepEl.classList.remove('active');
+        }
+      });
+
+      // Update vertical progress line height based on index
+      const progressLine = document.getElementById('timeline-progress');
+      if (steps.length > 1) {
+        const percent = (index / (steps.length - 1)) * 90; // max out at around 90% for visual aesthetics
+        progressLine.style.height = `${percent}%`;
+      } else {
+        progressLine.style.height = '0%';
+      }
+
+      // Populate detail panel
+      document.getElementById('detail-placeholder').style.display = 'none';
+      const detailWrap = document.getElementById('detail-panel-content');
+      
+      document.getElementById('detail-badge-label').innerText = step.time;
+      document.getElementById('detail-title').innerText = step.label;
+      document.getElementById('detail-desc').innerText = step.desc;
+      
+      // Render deliverables
+      const deliverablesContainer = document.getElementById('detail-deliverables');
+      deliverablesContainer.innerHTML = '';
+      step.deliverables.forEach(deliv => {
+        const tag = document.createElement('span');
+        tag.className = 'deliv-tag';
+        tag.innerText = deliv;
+        deliverablesContainer.appendChild(tag);
+      });
+
+      // Update risk and tip
+      document.getElementById('detail-risk').innerText = step.risk;
+      document.getElementById('detail-tip').innerText = step.tip;
+
+      detailWrap.classList.add('active');
+    }
+
+    // SECTION 3: COMPARAÇÃO (Causa & Efeito Highlights)
+    function highlightPair(pairId) {
+      const cards = document.querySelectorAll('.comp-card');
+      
+      // Check if clicked is already highlighted
+      const isActive = document.querySelector(`.comp-card[data-pair="${pairId}"].highlighted-danger`);
+      
+      if (isActive) {
+        // Reset all
+        cards.forEach(c => {
+          c.classList.remove('highlighted-danger', 'highlighted-success', 'dimmed');
+        });
+        return;
+      }
+
+      // Highlight corresponding pair
+      cards.forEach(card => {
+        const cardPair = card.getAttribute('data-pair');
+        if (cardPair === pairId) {
+          card.classList.remove('dimmed');
+          if (card.classList.contains('before-card')) {
+            card.classList.add('highlighted-danger');
+          } else {
+            card.classList.add('highlighted-success');
+          }
+        } else {
+          card.classList.remove('highlighted-danger', 'highlighted-success');
+          card.classList.add('dimmed');
+        }
+      });
+    }
+
+    // SECTION 4: APRESENTAÇÃO - CHECKLIST WIDGET
+    function toggleCheckItem(element) {
+      element.classList.toggle('checked');
+      updateChecklistProgress();
+    }
+
+    function updateChecklistProgress() {
+      const items = document.querySelectorAll('.check-item');
+      const checkedItems = document.querySelectorAll('.check-item.checked');
+      
+      const percent = items.length > 0 ? Math.round((checkedItems.length / items.length) * 100) : 0;
+      
+      // Update progress bar UI
+      document.getElementById('checklist-progress-bar').style.width = `${percent}%`;
+      document.getElementById('checklist-percent-text').innerText = `${percent}%`;
+
+      // Show/Hide celebration toast
+      const celebration = document.getElementById('checklist-celebration');
+      if (percent === 100) {
+        celebration.classList.add('show');
+      } else {
+        celebration.classList.remove('show');
+      }
+    }
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', () => {
+      // Render initial scenario A
+      renderScenarioTimeline('A');
+    });
+  </script>
+</body>
+</html>
