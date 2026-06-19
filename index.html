@@ -453,30 +453,27 @@
     .scenario-expand-hint {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: center;
       flex-shrink: 0;
-      font-family: 'Outfit', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
+      width: 36px;
+      height: 36px;
       color: var(--accent-cyan);
       background: rgba(6, 182, 212, 0.08);
       border: 1px solid rgba(6, 182, 212, 0.25);
-      border-radius: 20px;
-      padding: 8px 16px;
-      white-space: nowrap;
+      border-radius: 50%;
+      transition: var(--transition-smooth);
+    }
+    .scenario-block-header:hover .scenario-expand-hint {
+      background: rgba(6, 182, 212, 0.18);
+      border-color: rgba(6, 182, 212, 0.45);
     }
     .scenario-expand-hint .expand-chevron {
-      font-size: 14px;
+      font-size: 16px;
+      line-height: 1;
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .scenario-block.expanded .scenario-expand-hint .expand-chevron {
       transform: rotate(180deg);
-    }
-    .scenario-block.expanded .scenario-expand-hint .expand-label-closed {
-      display: none;
-    }
-    .scenario-block:not(.expanded) .scenario-expand-hint .expand-label-open {
-      display: none;
     }
 
     .scenario-block[data-scenario="A"] .scenario-block-header { border-left: 4px solid #10b981; }
@@ -1812,8 +1809,6 @@
               <p class="scenario-block-desc">${scenario.desc}</p>
             </div>
             <div class="scenario-expand-hint">
-              <span class="expand-label-closed">👆 Clique para ver as semanas</span>
-              <span class="expand-label-open">Ocultar semanas</span>
               <span class="expand-chevron">▾</span>
             </div>
           </div>
