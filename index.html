@@ -406,19 +406,34 @@
       line-height: 1.6;
     }
 
-    /* SCENARIO BLOCKS (static landing-page layout, one per cenário) */
+    /* SCENARIO BLOCKS (collapsible accordion, one per cenário) */
     .scenario-block {
-      margin-bottom: 56px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.35);
+      overflow: hidden;
+      transition: var(--transition-smooth);
     }
     .scenario-block:last-child {
       margin-bottom: 0;
     }
+    .scenario-block.expanded {
+      border-color: var(--border-glow);
+    }
+
     .scenario-block-header {
       display: flex;
       align-items: center;
       gap: 16px;
-      margin-bottom: 20px;
       flex-wrap: wrap;
+      padding: 28px 32px;
+      cursor: pointer;
+      user-select: none;
+      transition: var(--transition-smooth);
+    }
+    .scenario-block-header:hover {
+      background: rgba(255, 255, 255, 0.03);
     }
     .scenario-block-header h3 {
       font-family: 'Outfit', sans-serif;
@@ -426,19 +441,61 @@
       font-weight: 700;
       color: #ffffff;
     }
+    .scenario-block-header-text {
+      flex: 1;
+      min-width: 220px;
+    }
     .scenario-block-desc {
       font-size: 14px;
       color: var(--text-secondary);
-      max-width: 750px;
-      margin-bottom: 16px;
+      margin-top: 6px;
     }
-    .scenario-block[data-scenario="A"] .scenario-steps-grid { border-color: rgba(16, 185, 129, 0.15); }
-    .scenario-block[data-scenario="B"] .scenario-steps-grid { border-color: rgba(245, 158, 11, 0.15); }
-    .scenario-block[data-scenario="C"] .scenario-steps-grid { border-color: rgba(239, 68, 68, 0.15); }
+    .scenario-expand-hint {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.08);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+      border-radius: 20px;
+      padding: 8px 16px;
+      white-space: nowrap;
+    }
+    .scenario-expand-hint .expand-chevron {
+      font-size: 14px;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .scenario-block.expanded .scenario-expand-hint .expand-chevron {
+      transform: rotate(180deg);
+    }
+    .scenario-block.expanded .scenario-expand-hint .expand-label-closed {
+      display: none;
+    }
+    .scenario-block:not(.expanded) .scenario-expand-hint .expand-label-open {
+      display: none;
+    }
 
+    .scenario-block[data-scenario="A"] .scenario-block-header { border-left: 4px solid #10b981; }
+    .scenario-block[data-scenario="B"] .scenario-block-header { border-left: 4px solid #f59e0b; }
+    .scenario-block[data-scenario="C"] .scenario-block-header { border-left: 4px solid #ef4444; }
+
+    .scenario-steps-panel {
+      display: none;
+      padding: 24px 32px 32px;
+      border-top: 1px solid var(--border-color);
+    }
+    .scenario-block.expanded .scenario-steps-panel {
+      display: block;
+    }
+
+    /* Weeks stacked one below the other, full width, to make room for side-by-side content */
     .scenario-steps-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      flex-direction: column;
       gap: 20px;
     }
 
@@ -446,7 +503,7 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      padding: 24px;
+      padding: 28px;
       backdrop-filter: var(--glass-blur);
       transition: var(--transition-smooth);
     }
@@ -459,6 +516,18 @@
       align-items: center;
       gap: 14px;
       margin-bottom: 14px;
+    }
+
+    /* Wider week card: deliverables get more breathing room, risk + tip sit side by side */
+    .detail-boxes-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .detail-boxes-row .detail-box-alert,
+    .detail-boxes-row .detail-box-tip {
+      margin-bottom: 0;
+      height: 100%;
     }
 
     /* TIMELINE DYNAMIC ROW */
@@ -1160,7 +1229,7 @@
 
     /* RESPONSIVE DESIGN */
     @media (max-width: 992px) {
-      .scenario-steps-grid {
+      .detail-boxes-row {
         grid-template-columns: 1fr;
       }
     }
@@ -1174,6 +1243,9 @@
       }
       .nav-container {
         padding: 8px 12px;
+      }
+      .scenario-block-header {
+        padding: 20px;
       }
       .nav-btn {
         padding: 10px 14px;
@@ -1713,40 +1785,57 @@
             <div class="deliverables-flex">
               ${step.deliverables.map(d => `<span class="deliv-tag">${d}</span>`).join('')}
             </div>
-            <div class="detail-box-alert">
-              <div class="box-icon">🚨</div>
-              <div class="box-text">
-                <h5>Risco de Omissão</h5>
-                <p>${step.risk}</p>
+            <div class="detail-boxes-row">
+              <div class="detail-box-alert">
+                <div class="box-icon">🚨</div>
+                <div class="box-text">
+                  <h5>Risco de Omissão</h5>
+                  <p>${step.risk}</p>
+                </div>
               </div>
-            </div>
-            <div class="detail-box-tip">
-              <div class="box-icon">⚡</div>
-              <div class="box-text">
-                <h5>Dica de Condução</h5>
-                <p>${step.tip}</p>
+              <div class="detail-box-tip">
+                <div class="box-icon">⚡</div>
+                <div class="box-text">
+                  <h5>Dica de Condução</h5>
+                  <p>${step.tip}</p>
+                </div>
               </div>
             </div>
           </div>
         `).join('');
 
         block.innerHTML = `
-          <div class="scenario-block-header">
+          <div class="scenario-block-header" onclick="toggleScenarioBlock('${scenarioId}')">
             <span class="scenario-badge-tag ${scenario.badgeClass}">${scenario.badgeLabel}</span>
-            <h3>${scenario.badgeVal}</h3>
-          </div>
-          <p class="scenario-block-desc">${scenario.desc}</p>
-          ${scenario.warning ? `
-            <div class="timeline-alert-box ${scenarioId === 'C' ? 'alert-danger' : 'alert-warning'}">
-              <span>🚨</span>
-              <div><strong>Atenção de Cronograma:</strong> ${scenario.warning}</div>
+            <div class="scenario-block-header-text">
+              <h3>${scenario.badgeVal}</h3>
+              <p class="scenario-block-desc">${scenario.desc}</p>
             </div>
-          ` : ''}
-          <div class="scenario-steps-grid">${stepsHtml}</div>
+            <div class="scenario-expand-hint">
+              <span class="expand-label-closed">👆 Clique para ver as semanas</span>
+              <span class="expand-label-open">Ocultar semanas</span>
+              <span class="expand-chevron">▾</span>
+            </div>
+          </div>
+          <div class="scenario-steps-panel">
+            ${scenario.warning ? `
+              <div class="timeline-alert-box ${scenarioId === 'C' ? 'alert-danger' : 'alert-warning'}">
+                <span>🚨</span>
+                <div><strong>Atenção de Cronograma:</strong> ${scenario.warning}</div>
+              </div>
+            ` : ''}
+            <div class="scenario-steps-grid">${stepsHtml}</div>
+          </div>
         `;
 
         container.appendChild(block);
       });
+    }
+
+    // Scenarios start closed; clicking the header expands/collapses its weeks
+    function toggleScenarioBlock(scenarioId) {
+      const block = document.querySelector(`.scenario-block[data-scenario="${scenarioId}"]`);
+      block.classList.toggle('expanded');
     }
 
     // SECTION 3: COMPARAÇÃO (Causa & Efeito Highlights)
