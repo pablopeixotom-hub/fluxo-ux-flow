@@ -1721,35 +1721,35 @@
         badgeClass: 'red-bg',
         badgeLabel: 'Crítico',
         badgeVal: 'Cenário C · 1 Semana',
-        desc: 'Design de extrema urgência. Entrevistas primárias suspensas. Discovery baseado em dados históricos e proxy de stakeholders.',
-        warning: 'Processo altamente arriscado. A ausência de entrevistas deve ser mitigada com proximidade diária dos stakeholders e de produto.',
+        desc: 'Design de extrema urgência. Entrevistas suspensas: a semana abre com alinhamento direto com stakeholders, segue com discovery via dados secundários e fecha com construção e validação do MVP no Figma.',
+        warning: 'Processo altamente arriscado. A ausência de entrevistas deve ser mitigada com discovery orientado a dados e checkpoints diários com os stakeholders.',
         steps: [
           {
             badge: '📅',
-            time: 'Dias 1 – 2',
-            label: 'Kickoff de Alinhamento & Proxy',
-            desc: 'Workshop intensivo de alinhamento. Mapeamento de fluxos via stakeholders experientes atuando como proxy dos usuários finais.',
-            deliverables: ['Fluxograma de Processo Consolidado', 'Lista de Restrições Técnicas'],
-            risk: 'Seguir premissas incorretas de usabilidade devido ao distanciamento dos usuários reais.',
-            tip: 'Use dados históricos de suporte, reclamações e análises anteriores do funil para suprir a falta de entrevistas.'
+            time: 'Dia 1',
+            label: 'Agenda & Alinhamento com Stakeholders',
+            desc: 'Reunião de abertura para travar agenda da semana, alinhar expectativas e mapear, junto aos stakeholders do projeto, os objetivos de negócio, restrições técnicas e o recorte mínimo viável a ser atacado nos dias seguintes.',
+            deliverables: ['Agenda da Semana Fechada', 'Briefing de Objetivos de Negócio', 'Restrições Técnicas Mapeadas'],
+            risk: 'Iniciar o discovery sem um briefing claro, gerando retrabalho de pesquisa nos dias seguintes por falta de direção.',
+            tip: 'Saia dessa reunião com o problema central escrito em uma frase única, validada por todos os presentes.'
           },
           {
-            badge: '🎙️',
-            time: 'Dia 3',
-            label: 'Entrevista de Validação Relâmpago',
-            desc: 'Realização de uma entrevista/validação única com usuário-chave ou analista operacional para chancelar o fluxo desenhado preliminarmente.',
-            deliverables: ['Ajustes rápidos de Fluxo', 'Notas de Risco Mapeado'],
-            risk: 'Lançar o fluxo contendo erros óbvios na lógica que poderiam ser descobertos em um teste de 15 minutos.',
-            tip: 'Mesmo com 15 minutos, teste o fluxo de wireframes com alguém que não faça parte do projeto.'
+            badge: '🔍',
+            time: 'Dias 2 – 4',
+            label: 'Discovery & Desk Research Intensivo',
+            desc: 'Sem espaço na agenda para entrevistas, o UX assume um discovery orientado a dados: pesquisa de segmento, benchmarking de concorrentes, análise de dados históricos (suporte, funil, reclamações) e refinamento das hipóteses de produto a partir de fontes secundárias.',
+            deliverables: ['Pesquisa de Segmento & Concorrentes', 'Análise de Dados Históricos', 'Hipóteses de Produto Refinadas'],
+            risk: 'Validar hipóteses apenas com dados secundários e premissas internas, sem nenhum contraponto da voz real do usuário.',
+            tip: 'Cruze dados de suporte e atendimento com o benchmarking para compensar a ausência de entrevistas com evidências indiretas do usuário.'
           },
           {
-            badge: '📋',
-            time: 'Dias 4 – 5',
-            label: 'Figma MVP1 & Homologação Express',
-            desc: 'Modelagem do fluxo feliz principal no Figma e apresentação para chancela formal com stakeholders nas últimas horas do prazo.',
-            deliverables: ['Fluxo Feliz no Figma', 'Aprovação Visual Rápida'],
-            risk: 'Dev iniciar tarefas de front-end às escuras, resultando em retrabalhos severos no meio da sprint.',
-            tip: 'Adicione anotações funcionais diretamente no Figma para mitigar dúvidas e compensar a falta de detalhamento visual.'
+            badge: '🖼️',
+            time: 'Dias 5 – 7',
+            label: 'Figma & MVP — Alinhamento e Refinamento',
+            desc: 'Construção do fluxo e das telas do MVP no Figma a partir do discovery dos dias anteriores, com checkpoints diários e curtos junto aos stakeholders para refinar decisões em tempo real e fechar a semana com aval formal do escopo.',
+            deliverables: ['Fluxo Feliz no Figma', 'Checkpoints Diários Registrados', 'Aval Formal do MVP'],
+            risk: 'Construir o MVP inteiro sem checkpoints intermediários, descobrindo desalinhamentos graves só na validação final do dia 7.',
+            tip: 'Reserve 15 minutos diários com um stakeholder fixo para revisar o progresso — pequenos ajustes diários evitam retrabalho grande no fim da semana.'
           }
         ]
       }
